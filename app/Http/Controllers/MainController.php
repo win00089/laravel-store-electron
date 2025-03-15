@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Category;
+
 use App\Http\Requests\ProductsFilterRequest;
-use App\Product;
+use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class MainController extends Controller
 {
     public function index(ProductsFilterRequest $request)
     {
-        $productQuery = Product::query();
+        $productQuery = Product::with('category');
 
         if($request->filled('price_from')){
             $productQuery->where('price', '>=', $request->price_from);
@@ -23,7 +24,7 @@ class MainController extends Controller
 
         foreach(['hit','new','recommend'] as $field){
             if($request->has($field)){
-                $productQuery->where($field, 1);
+                $productQuery->$field();
             }
         }
         
