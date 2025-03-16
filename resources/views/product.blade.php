@@ -4,11 +4,14 @@
 
 @section('content')
 
-    <h1>iPhone X 64GB</h1>
-    <h4>{{ $product }}</h4>
-    <p>Цена: <b>71990 руб.</b></p>
-    <img src="http://laravel.store.electron/storage/{{ $productBase->image }}">
-    <p>Отличный продвинутый телефон с памятью на 64 gb</p>
-    <a class="btn btn-success" href="http://laravel.store.electron/basket/1/add">Добавить в корзину</a>
-
+    <h1>{{$product->name}}</h1>
+    <h4>{{ $product->category->name }}</h4>
+    <p>Цена: <b>{{$product->price}}</b></p>
+    <img src="{{ Storage::url($product->image) }}">
+    <p>{{$product->description}}</p>
+    @if($product->isAvailable())
+    <a class="btn btn-success" href="{{ route('basket-add', $product) }}">Добавить в корзину</a>
+    @else
+    Не доступен
+    @endif
 @endsection

@@ -15,6 +15,9 @@ class BasketController extends Controller
         if (!is_null($orderID)) {
             $order = Order::findOrFail($orderID);
         }
+        if (is_null($orderID)) {
+            return redirect()->route('index')->with('warning', 'Корзина пуста');
+        }
         return view('basket', compact('order'));
     }
 

@@ -28,32 +28,28 @@ class MainController extends Controller
             }
         }
         
-        $products = $productQuery->paginate(3)->withPath("?" . $request->getQueryString());
+        $products = $productQuery->paginate(6)->withPath("?" . $request->getQueryString());
         return view('index', compact('products'));
     }
+
     public function categories()
     {
         $categories = Category::get();
         
         return view('categories', compact('categories'));
     }
+
     public function category($code)
     {
         $category = Category::where('code', $code)->first();
 
         return view('category', compact('category'));
     }
-    // public function product($category, $product = null)
-    // {
-    //     dd($product);
-    //     return view('product', compact('product'));
-    // }
 
-    public function product($category, $product = null)
+    public function product($category, $productCode)
     {
-        $productBase = Product::where('code', $product)->first();
-        //dd($productBase);
-        return view('product', compact('productBase','product'));
+        $product = Product::withTrashed()->byCode($productCode)->first();
+        return view('product', compact('product'));
     }
 
 
