@@ -13,7 +13,7 @@ class BasketController extends Controller
     public function basket()
     {
         $order = (new Basket())->getOrder();
-        
+
         return view('basket', compact('order'));
     }
 
@@ -22,27 +22,38 @@ class BasketController extends Controller
         if ((new Basket())->saveOrder($request->name, $request->phone)) {
             session()->flash('success', 'Ваш заказ принят в обработку');
         } else {
-            session()->flash('warning', 'Случилась ошибка');
+            session()->flash('warning', 'Товар не доступен для заказа в полном обьеме');
         }
         Order::eraseOrderSum();
         return redirect()->route('index');
     }
     public function basketPlace()
     {
-        $order = (new Basket())->getOrder();
+        $basket = new Basket();
+        $order = $basket->getOrder();
+        if(!$basket->countAvaliable()){
+            session()->flash('warning', 'Товар не доступен для заказа в полном обьеме');
+            return redirect()->route('basket');
+        }
+
         return view('order', compact('order'));
     }
     public function basketAdd(Product $product)
     {
-        (new Basket(true))->addProduct($product);
+        $result = (new Basket(true))->addProduct($product);
         
-        session()->flash('success', 'Добавлен товар ' . $product->name);
+        if ($result) {
+            session()->flash('success', 'Добавлен товар ' . $product->name);
+        } else {
+            session()->flash('warning', 'Товар ' . $product->name. ' в большем кол-ве не доступен для заказа');
+        }
+
         return redirect()->route('basket');
     }
     public function basketRemove(Product $product)
     {
         (new Basket())->removeProduct($product);
-        
+
         session()->flash('warning', 'Удален товар ' . $product->name);
         return redirect()->route('basket');
     }
