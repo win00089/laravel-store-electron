@@ -19,6 +19,8 @@ Auth::routes([
     'verify' => false,
 ]);
 
+Route::get('locale/{locale}', 'MainController@changeLocale')->name('locale');
+
 Route::get('reset', 'ResetController@reset')->name('reset');
 
 Route::get('/logout', 'Auth\LoginController@logout')->name('get-logout');
@@ -51,6 +53,8 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/', 'MainController@index')->name('index');
 Route::get('/categories', 'MainController@categories')->name('categories');
+Route::post('/subscription/{product}', 'MainController@subscribe')->name('subscription');
+
 
 Route::group([
     'prefix' => 'basket'
