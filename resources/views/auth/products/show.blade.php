@@ -3,10 +3,10 @@
 @section('title', 'Продукт ' . $product->name)
 
 @section('content')
-<div class="col-md-12">
-    <h1>{{ $product->name }}</h1>
-    <table class="table">
-        <tbody>
+    <div class="col-md-12">
+        <h1>{{ $product->name }}</h1>
+        <table class="table">
+            <tbody>
             <tr>
                 <th>
                     Поле
@@ -28,12 +28,20 @@
                 <td>{{ $product->name }}</td>
             </tr>
             <tr>
+                <td>Название en</td>
+                <td>{{ $product->name_en }}</td>
+            </tr>
+            <tr>
                 <td>Описание</td>
                 <td>{{ $product->description }}</td>
             </tr>
             <tr>
+                <td>Описание en</td>
+                <td>{{ $product->description_en }}</td>
+            </tr>
+            <tr>
                 <td>Картинка</td>
-                <td><img src="{{Storage::url($product->image)}}" height="240px"></td>
+                <td><img src="{{ Storage::url($product->image) }}" height="240px"></td>
             </tr>
             <tr>
                 <td>Категория</td>
@@ -42,18 +50,20 @@
             <tr>
                 <td>Лейблы</td>
                 <td>
-                    @if ($product->isNew())
-                    <span class="badge badge-success">Новинка</span>
+                    @if($product->isNew())
+                        <span class="badge badge-success">Новинка</span>
                     @endif
-                    @if ($product->isRecommend())
-                    <span class="badge badge-warning">Рекомендуем</span>
+
+                    @if($product->isRecommend())
+                        <span class="badge badge-warning">Рекомендуем</span>
                     @endif
-                    @if ($product->isHit())
-                    <span class="badge badge-danger">Хит продаж!</span>
+
+                    @if($product->isHit())
+                        <span class="badge badge-danger">Хит продаж!</span>
                     @endif
                 </td>
             </tr>
-        </tbody>
-    </table>
-</div>
+            </tbody>
+        </table>
+    </div>
 @endsection

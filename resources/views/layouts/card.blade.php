@@ -11,15 +11,20 @@
                 <span class="badge badge-danger">Хит продаж!</span>
             @endif
         </div>
-        <img src="{{Storage::url($product->image)}}" alt="iPhone X 64GB">
+        <img src="{{Storage::url($product->image)}}" alt="{{ $product->__('name') }}">
         <div class="caption">
-            <h3>{{$product->name}}</h3>
+            <h3>{{$product->__('name')}}</h3>
             <p>{{$product->price}}</p>
             <p>
             <form action="{{route('basket-add', $product->id )}}" method="POST">
-
+                @if ($product->isAvailable())
+                    
                 <button type="submit" class="btn btn-primary" role="button">В корзину</button>
-                <a href="{{ route('product', [$product->category->code, $product->code]) }}" class="btn btn-default" role="button">Подробнее</a>
+                @else
+                Не доступен
+                @endif
+
+                <a href="{{ route('product', [isset($category) ? $category->code : $product->category->code, $product->code]) }}" class="btn btn-default" role="button">Подробнее</a>
                 @csrf
 
             </form>

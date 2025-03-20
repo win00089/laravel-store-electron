@@ -1,14 +1,16 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
+use App\Models\Traits\Translatable;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
+    use SoftDeletes, Translatable;
 
-    protected $fillable = ['name', 'code', 'price', 'category_id', 'description', 'image', 'hit', 'new', 'recommend'];
+    protected $fillable = ['name', 'code', 'price', 'category_id', 'description', 'image', 'hit', 'new', 'recommend', 'count', 'name_en','description_en'];
 
     public function category()
     {
@@ -21,6 +23,20 @@ class Product extends Model
             return $this->pivot->count * $this->price;
         }
         return $this->price;
+    }
+
+    public function scopeByCode($query, $code){
+        return $query->where('code', $code);
+    }
+
+    public function scopeHit($query){
+        return $query->where('hit', 1);
+    }
+    public function scopeNew($query){
+        return $query->where('new', 1);
+    }
+    public function scopeRecommend($query){
+        return $query->where('recommend', 1);
     }
 
     public function setNewAttribute($value)
@@ -37,6 +53,11 @@ class Product extends Model
     public function setRecommendAttribute($value)
     {
         $this->attributes['recommend'] = $value === 'on' ? 1 : 0;
+    }
+
+    public function isAvailable(){
+
+        return !$this->trashed() && $this->count > 0;
     }
 
     public function isHit() {

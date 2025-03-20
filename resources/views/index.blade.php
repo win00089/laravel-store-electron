@@ -38,6 +38,7 @@
     </div>
 </form>
 
+
 <div class="row">
     @foreach ($products as $product)
     @include('layouts.card', compact('product'))

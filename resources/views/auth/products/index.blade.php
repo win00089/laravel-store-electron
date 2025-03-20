@@ -24,6 +24,9 @@
                     Цена
                 </th>
                 <th>
+                    Кол-во
+                </th>
+                <th>
                     Действия
                 </th>
             </tr>
@@ -34,6 +37,7 @@
                     <td>{{ $product->name }}</td>
                     <td>{{ $product->category->name }}</td>
                     <td>{{ $product->price }}</td>
+                    <td>{{ $product->count }}</td>
                     <td>
                         <div class="btn-group" role="group">
                             <form action="{{ route('products.destroy', $product) }}" method="POST">
@@ -50,6 +54,7 @@
             @endforeach
             </tbody>
         </table>
+        {{ $products->links() }}
         <a class="btn btn-success" type="button" href="{{ route('products.create') }}">Добавить товар</a>
     </div>
 @endsection
