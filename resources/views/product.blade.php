@@ -4,11 +4,11 @@
 
 @section('content')
 
-<h1>{{$product->name}}</h1>
+<h1>{{$product->__('name')}}</h1>
 <h4>{{ $product->category->name }}</h4>
 <p>Цена: <b>{{$product->price}}</b></p>
 <img src="{{ Storage::url($product->image) }}">
-<p>{{$product->description}}</p>
+<p>{{$product->__('description')}}</p>
 
 @if ($product->isAvailable())
 <form action="{{route('basket-add', $product->id )}}" method="POST">
