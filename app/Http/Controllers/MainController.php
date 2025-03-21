@@ -14,8 +14,11 @@ use Illuminate\Support\Facades\App;
 
 class MainController extends Controller
 {
+
     public function index(ProductsFilterRequest $request)
     {
+        \App\Services\CurrencyRates::getRates();
+
         $productQuery = Product::with('category');
 
         if ($request->filled('price_from')) {
