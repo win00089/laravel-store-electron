@@ -36,7 +36,7 @@
                     <td>{{ $product->code }}</td>
                     <td>{{ $product->name }}</td>
                     <td>{{ $product->category->name }}</td>
-                    <td>{{ $product->price }}</td>
+                    <td>{{ $product->price }} {{ App\Services\CurrencyConversion::getCurrencySymbol() }}</td>
                     <td>{{ $product->count }}</td>
                     <td>
                         <div class="btn-group" role="group">
