@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Order;
+
 use Closure;
 
 class BasketIsNotEmpty
@@ -16,8 +16,8 @@ class BasketIsNotEmpty
      */
     public function handle($request, Closure $next)
     {
-        $orderId = session('orderId');
-        if (!is_null($orderId && Order::getFullSum() > 0)) {
+        $order = session('order');
+        if (!is_null($order) && $order->getFullSum() > 0) {
                 return $next($request);    
         }
         session()->flash('warning', 'Ваша корзина пуста!');

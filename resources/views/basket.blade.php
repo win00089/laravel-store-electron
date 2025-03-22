@@ -25,7 +25,7 @@
                             {{$product->__('name')}}
                         </a>
                     </td>
-                    <td><span class="badge">{{ $product->pivot->count }}</span>
+                    <td><span class="badge">{{ $product->countInOrder ?? 1 }}</span>
                         <div class="btn-group form-inline">
                             <form action="{{route('basket-remove', $product)}}" method="POST">
                                 <button type="submit" class="btn btn-danger"><span
@@ -40,7 +40,7 @@
                         </div>
                     </td>
                     <td>{{$product->price}} {{ App\Services\CurrencyConversion::getCurrencySymbol() }}</td>
-                    <td>{{$product->getPriceForCount()}} {{ App\Services\CurrencyConversion::getCurrencySymbol() }}</td>
+                    <td>{{$product->price * $product->countInOrder ?? 1}} {{ App\Services\CurrencyConversion::getCurrencySymbol() }}</td>
                 </tr>
                 @endforeach
 
