@@ -26,14 +26,13 @@ class BasketController extends Controller
         } else {
             session()->flash('warning', 'Товар не доступен для заказа в полном обьеме');
         }
-        Order::eraseOrderSum();
         return redirect()->route('index');
     }
     public function basketPlace()
     {
         $basket = new Basket();
         $order = $basket->getOrder();
-        if(!$basket->countAvaliable()){
+        if(!$basket->countAvailable()){
             session()->flash('warning', 'Товар не доступен для заказа в полном обьеме');
             return redirect()->route('basket');
         }

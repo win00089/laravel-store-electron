@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Mail;
 class Basket
 {
     protected $order;
+    
 
     /**
      * Basket constructor.
@@ -46,9 +47,11 @@ class Basket
     public function countAvailable($updateCount = false)
     {
         $products = collect([]);
+        
         foreach ($this->order->products as $orderProduct)
         {
             $product = Product::find($orderProduct->id);
+            
             if ($orderProduct->countInOrder > $product->count) {
                 return false;
             }
@@ -56,9 +59,10 @@ class Basket
             if ($updateCount) {
                 $product->count -= $orderProduct->countInOrder;
                 $products->push($product);
+                
             }
         }
-
+        
         if ($updateCount) {
             $products->map->save();
         }
