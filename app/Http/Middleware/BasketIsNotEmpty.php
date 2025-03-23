@@ -20,6 +20,7 @@ class BasketIsNotEmpty
         if (!is_null($order) && $order->getFullSum() > 0) {
                 return $next($request);    
         }
+        session()->flash('order');
         session()->flash('warning', 'Ваша корзина пуста!');
         return redirect()->route('index');
     }

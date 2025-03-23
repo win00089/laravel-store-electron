@@ -33,7 +33,11 @@ class Order extends Model
 
     public function getFullSum()
     {
-        $sum = 1;
+        $sum = 0;
+
+        foreach($this->products as $product){
+            $sum += $product->price * $product->countInOrder;
+        }
         return $sum;
     }
     public function saveOrder($name, $phone)
