@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Classes\Basket;
-use App\Http\Middleware\Authenticate;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
