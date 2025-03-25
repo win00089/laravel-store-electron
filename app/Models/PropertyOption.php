@@ -15,4 +15,8 @@ class PropertyOption extends Model
     public function property() {
         return $this->belongsTo(Property::class);
     }
+
+    public function skus(){
+        return $this->belongsToMany(Sku::class);
+    }
 }

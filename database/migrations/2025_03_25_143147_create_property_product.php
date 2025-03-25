@@ -15,8 +15,9 @@ class CreatePropertyProduct extends Migration
     {
         Schema::create('property_product', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedInteger('product_id');
+            $table->unsignedInteger('property_id');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

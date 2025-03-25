@@ -11,4 +11,9 @@ class Sku extends Model
     public function product(){
         return $this->belongsTo(Product::class);
     }
+
+    //TODO: check table name and fields
+    public function skus(){
+        return $this->belongsToMany(PropertyOption::class);
+    }
 }

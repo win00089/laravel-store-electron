@@ -16,4 +16,8 @@ class Property extends Model
     {
         return $this->hasMany(PropertyOption::class);
     }
+
+    public function products(){
+        return $this->belongsToMany(Product::class);
+    }
 }

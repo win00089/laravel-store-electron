@@ -18,6 +18,7 @@ class CreatePropertiesTable extends Migration
             $table->string('name');
             $table->string('name_en');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
