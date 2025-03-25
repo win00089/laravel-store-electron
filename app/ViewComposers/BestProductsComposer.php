@@ -20,3 +20,5 @@ class BestProductsComposer
     $view->with('bestProducts', $bestProducts);
   }
 }
+
+
