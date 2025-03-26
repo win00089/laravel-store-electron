@@ -50,6 +50,7 @@ Route::middleware(['set_locale'])->group(function () {
             Route::resource('categories', 'CategoryController');
             Route::resource('products', 'ProductController');
             Route::resource('properties', 'PropertyController');
+            Route::resource('properties/{property}/property-options', 'PropertyOptionController');
         });
     });
 
