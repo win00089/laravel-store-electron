@@ -15,7 +15,7 @@ class SkuController extends Controller
      */
     public function index()
     {
-        //
+        
     }
 
     /**
