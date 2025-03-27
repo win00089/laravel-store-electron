@@ -23,6 +23,7 @@
             </tr>
             @foreach($propertyOptions as $propertyOption)
                 <tr>
+                    
                     <td>{{ $propertyOption->id }}</td>
                     <td>{{ $property->name }}</td>
                     <td>{{ $propertyOption->name }}</td>

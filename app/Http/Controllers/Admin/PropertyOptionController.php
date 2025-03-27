@@ -12,17 +12,19 @@ class PropertyOptionController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  Property  $property
      * @return \Illuminate\Http\Response
      */
     public function index(Property $property)
     {
-        $propertyOptions = PropertyOption::paginate(10);
+        $propertyOptions = PropertyOption::where('property_id', $property->id)->paginate(10);    
         return view('auth.property_options.index', compact('propertyOptions', 'property'));
     }
 
     /**
      * Show the form for creating a new resource.
      *
+     * @param  Property  $property
      * @return \Illuminate\Http\Response
      */
     public function create(Property $property)
@@ -33,14 +35,14 @@ class PropertyOptionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  PropertyOptionRequest  $request
+     * @param  Property  $property
      * @return \Illuminate\Http\Response
      */
     public function store(PropertyOptionRequest $request, Property $property)
     {
         $params = $request->all();
         $params['property_id'] = $request->property->id;
-
         PropertyOption::create($params);
         return redirect()->route('property-options.index', $property);
     }
@@ -48,8 +50,9 @@ class PropertyOptionController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param  Property  $property
      * @param  \App\Models\PropertyOption  $propertyOption
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function show(Property $property, PropertyOption $propertyOption)
     {
@@ -60,17 +63,19 @@ class PropertyOptionController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\PropertyOption  $propertyOption
-     * @return \Illuminate\Http\Response
+     * @param  Property  $property
+     * @return void
      */
     public function edit(Property $property, PropertyOption $propertyOption)
     {
-        return view('auth.property_options.form', compact('propertyOption','property'));
+        return view('auth.property_options.form', compact('propertyOption', 'property'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  Property  $property
      * @param  \App\Models\PropertyOption  $propertyOption
      * @return \Illuminate\Http\Response
      */
@@ -85,8 +90,10 @@ class PropertyOptionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param  Property  $property
      * @param  \App\Models\PropertyOption  $propertyOption
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
     public function destroy(Property $property, PropertyOption $propertyOption)
     {

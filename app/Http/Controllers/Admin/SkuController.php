@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SkuRequest;
+use App\Models\Product;
 use App\Models\Sku;
 use Illuminate\Http\Request;
 
@@ -13,9 +15,10 @@ class SkuController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Product $product)
     {
-        
+        $skus = $product->skus()->paginate(10);
+        return view('auth.skus.index', compact('skus','product'));
     }
 
     /**
@@ -23,9 +26,10 @@ class SkuController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Product $product)
     {
-        //
+        //dd($product->properties[0]['name']);
+        return view('auth.skus.form', compact('product'));
     }
 
     /**
@@ -34,9 +38,10 @@ class SkuController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store( SkuRequest $request, Product $product)
     {
-        //
+       $sku = Sku::create($request->all());
+       return redirect()->route('skus.index');
     }
 
     /**
@@ -45,7 +50,7 @@ class SkuController extends Controller
      * @param  \App\Models\Sku  $sku
      * @return \Illuminate\Http\Response
      */
-    public function show(Sku $sku)
+    public function show(Product $product, Sku $sku)
     {
         //
     }
@@ -56,7 +61,7 @@ class SkuController extends Controller
      * @param  \App\Models\Sku  $sku
      * @return \Illuminate\Http\Response
      */
-    public function edit(Sku $sku)
+    public function edit(Product $product, Sku $sku)
     {
         //
     }
@@ -68,7 +73,7 @@ class SkuController extends Controller
      * @param  \App\Models\Sku  $sku
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Sku $sku)
+    public function update(Request $request, Product $product, Sku $sku)
     {
         //
     }
@@ -79,7 +84,7 @@ class SkuController extends Controller
      * @param  \App\Models\Sku  $sku
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Sku $sku)
+    public function destroy(Product $product, Sku $sku)
     {
         //
     }
