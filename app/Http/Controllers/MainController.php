@@ -8,6 +8,7 @@ use App\Http\Requests\SubscriptionRequest;
 use App\Models\Category;
 use App\Models\Currency;
 use App\Models\Product;
+use App\Models\Sku;
 use App\Models\Subscription;
 use Illuminate\Support\Facades\App;
 
@@ -15,26 +16,26 @@ class MainController extends Controller
 {
     public function index(ProductsFilterRequest $request)
     {
+        $skusQuery = Sku::query();
+        // $productQuery = Product::with('category');
 
-        $productQuery = Product::with('category');
+        // if ($request->filled('price_from')) {
+        //     $productQuery->where('price', '>=', $request->price_from);
+        // }
 
-        if ($request->filled('price_from')) {
-            $productQuery->where('price', '>=', $request->price_from);
-        }
+        // if ($request->filled('price_to')) {
+        //     $productQuery->where('price', '<=', $request->price_to);
+        // }
 
-        if ($request->filled('price_to')) {
-            $productQuery->where('price', '<=', $request->price_to);
-        }
+        // foreach (['hit', 'new', 'recommend'] as $field) {
+        //     if ($request->has($field)) {
+        //         $productQuery->$field();
+        //     }
+        // }
+        $skus = $skusQuery->paginate(6);
+        // $products = $productQuery->paginate(6)->withPath("?" . $request->getQueryString());
 
-        foreach (['hit', 'new', 'recommend'] as $field) {
-            if ($request->has($field)) {
-                $productQuery->$field();
-            }
-        }
-
-        $products = $productQuery->paginate(6)->withPath("?" . $request->getQueryString());
-
-        return view('index', compact('products'));
+        return view('index', compact('skus'));
     }
 
     public function categories()
@@ -49,10 +50,16 @@ class MainController extends Controller
         return view('category', compact('category'));
     }
 
-    public function product($category, $productCode)
+    public function sku($categoryCode, $productCode, Sku $sku)
     {
-        $product = Product::withTrashed()->byCode($productCode)->firstOrFail();
-        return view('product', compact('product'));
+        if($sku->product->code != $productCode){
+            abort(404, 'Product not found');
+        }
+
+        if($sku->product->category->code != $categoryCode){
+            abort(404, 'Category not found');
+        } 
+        return view('product', compact('sku'));
     }
 
     public function subscribe(SubscriptionRequest $request, Product $product)
@@ -75,10 +82,10 @@ class MainController extends Controller
         return redirect()->back();
     }
 
-    public function changeCurrency($currencyCode){
+    public function changeCurrency($currencyCode)
+    {
         $currency = Currency::byCode($currencyCode)->firstOrFail();
         session(['currency' => $currency->code]);
         return redirect()->back();
-        
     }
 }

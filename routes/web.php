@@ -78,5 +78,5 @@ Route::middleware(['set_locale'])->group(function () {
     });
 
     Route::get('/{category}', 'MainController@category')->name('category');
-    Route::get('/{category}/{product?}', 'MainController@product')->name('product');
+    Route::get('/{category}/{product}/{sku}', 'MainController@sku')->name('sku');
 });
