@@ -15,7 +15,7 @@
   @endisset
 
   <form method="POST" enctype="multipart/form-data"
-    @isset($skus)
+    @isset($sku)
     action="{{ route('skus.update', [$product, $sku]) }}"
     @else
     action="{{ route('skus.store', $product) }}"
