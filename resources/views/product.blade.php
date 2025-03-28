@@ -7,6 +7,13 @@
 <h1>{{$sku->product->__('name')}}</h1>
 <h4>{{ $sku->product->category->name }}</h4>
 <p>Цена: <b>{{$sku->price}} {{ $currencySymbol }}</b></p>
+
+@isset($sku->product->properties)
+                @foreach ($sku->propertyOptions as $propertyOption)
+                    <h4>{{$propertyOption->property->__('name')}}: {{$propertyOption->__('name')}}</h4>  
+                @endforeach
+            @endisset
+
 <img src="{{ Storage::url($sku->product->image) }}">
 <p>{{$sku->product->__('description')}}</p>
 

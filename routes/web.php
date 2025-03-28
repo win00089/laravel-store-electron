@@ -58,7 +58,7 @@ Route::middleware(['set_locale'])->group(function () {
 
     Route::get('/', 'MainController@index')->name('index');
     Route::get('/categories', 'MainController@categories')->name('categories');
-    Route::post('/subscription/{product}', 'MainController@subscribe')->name('subscription');
+    Route::post('/subscription/{sku}', 'MainController@subscribe')->name('subscription');
 
 
     Route::group([

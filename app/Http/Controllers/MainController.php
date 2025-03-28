@@ -62,11 +62,12 @@ class MainController extends Controller
         return view('product', compact('sku'));
     }
 
-    public function subscribe(SubscriptionRequest $request, Product $product)
+    public function subscribe(SubscriptionRequest $request, Sku $sku)
     {
+        
         Subscription::create([
             'email' => $request->email,
-            'product_id' => $product->id,
+            'sku_id' => $sku->id,
         ]);
         return redirect()->back()->with('success', 'Спасибо, мы сообщим вам о поступлении товара');
     }
