@@ -22,4 +22,12 @@ class Sku extends Model
     {
         return !$this->product->trashed() && $this->count > 0;
     }
+
+    public function getPriceForCount()
+    {
+        if (!is_null($this->pivot)) {
+            return $this->pivot->count * $this->price;
+        }
+        return $this->price;
+    }
 }
