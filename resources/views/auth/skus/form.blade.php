@@ -1,27 +1,27 @@
 @extends('auth.layouts.master')
 
-@isset($skus)
-@section('title', 'Редактировать Sku ' . $skus->name)
+@isset($sku)
+@section('title', 'Редактировать Sku ' . $sku->product->name)
 @else
 @section('title', 'Создать Sku')
 @endisset
 
 @section('content')
 <div class="col-md-12">
-  @isset($skus)
-  <h1>Редактировать Sku <b>{{ $skus->name }}</b></h1>
+  @isset($sku)
+  <h1>Редактировать Sku <b>{{ $sku->product->name }}</b></h1>
   @else
   <h1>Добавить Sku</h1>
   @endisset
 
   <form method="POST" enctype="multipart/form-data"
     @isset($skus)
-    action="{{ route('skus.update', [$product, $skus]) }}"
+    action="{{ route('skus.update', [$product, $sku]) }}"
     @else
     action="{{ route('skus.store', $product) }}"
     @endisset>
     <div>
-      @isset($skus)
+      @isset($sku)
       @method('PUT')
       @endisset
       @csrf
@@ -31,7 +31,7 @@
         <div class="col-sm-2">
           @include('auth.layouts.error', ['fieldName' => 'price'])
           <input type="text" class="form-control" name="price"
-            value="@isset($skus){{ $skus->price }}@endisset">
+            value="@isset($sku){{ $sku->price }}@endisset">
         </div>
       </div>
       <div class="input-group row">
@@ -39,7 +39,7 @@
         <div class="col-sm-2">
           @include('auth.layouts.error', ['fieldName' => 'count'])
           <input type="text" class="form-control" name="count"
-            value="@isset($skus){{ $skus->count }}@endisset">
+            value="@isset($sku){{ $sku->count }}@endisset">
         </div>
       </div>
       <br>
@@ -52,11 +52,11 @@
             @foreach($property->propertyOptions as $propertyOption)
             {{ $propertyOption->name }}
             <option value="{{ $propertyOption->id }}"
-              <!-- @isset($skus)
+               @isset($skus)
                @if($skus->propertyOptions->contains($propertyOption->id))
               selected
               @endif 
-              @endisset -->
+              @endisset 
               >{{ $propertyOption->name }}</option>
             @endforeach
           </select>

@@ -8,12 +8,13 @@ class Sku extends Model
 {
     protected $fillable = ['product_id', 'count', 'price'];
 
-    public function product(){
+    public function product()
+    {
         return $this->belongsTo(Product::class);
     }
 
-    //TODO: check table name and fields
-    public function skus(){
-        return $this->belongsToMany(PropertyOption::class);
+    public function propertyOptions()
+    {
+        return $this->belongsToMany(PropertyOption::class, 'sku_property_option')->withTimestamps();
     }
 }
