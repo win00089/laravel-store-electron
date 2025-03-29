@@ -25,9 +25,14 @@ class OrderSku extends Migration
         Schema::dropIfExists('order_product');
     }
 
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
     public function down()
     {
-        Schema::create('order_sku', function (Blueprint $table) {
+        Schema::create('order_product', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('order_id');
             $table->integer('product_id');
@@ -35,6 +40,7 @@ class OrderSku extends Migration
             $table->double('price');
             $table->timestamps();
         });
+
         Schema::dropIfExists('order_sku');
     }
 }

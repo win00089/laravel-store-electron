@@ -50,7 +50,7 @@ class Order extends Model
         $this->save();
 
         foreach($skus as $skuInOrder){
-            $this->products()->attach($skuInOrder, [
+            $this->skus()->attach($skuInOrder, [
                 'count' => $skuInOrder->countInOrder,
                 'price' => $skuInOrder->price,
             ]);            

@@ -64,7 +64,7 @@ Route::middleware(['set_locale'])->group(function () {
     Route::group([
         'prefix' => 'basket'
     ], function () {
-        Route::post('/add/{product}', 'BasketController@basketAdd')->name('basket-add');
+        Route::post('/add/{skus}', 'BasketController@basketAdd')->name('basket-add');
 
         Route::group([
             'middleware' => 'basket_not_empty'
@@ -72,7 +72,7 @@ Route::middleware(['set_locale'])->group(function () {
             Route::get('/', 'BasketController@basket')->name('basket');
             Route::get('/place', 'BasketController@basketPlace')->name('basket-place');
 
-            Route::post('/remove/{product}', 'BasketController@basketRemove')->name('basket-remove');
+            Route::post('/remove/{skus}', 'BasketController@basketRemove')->name('basket-remove');
             Route::post('/place', 'BasketController@basketConfirm')->name('basket-confirm');
         });
     });
