@@ -21,7 +21,7 @@
             @endisset
             <p>{{$sku->price}} {{ $currencySymbol }}</p>
             <p>
-            <form action="{{route('basket-add', $sku->product->id )}}" method="POST">
+            <form action="{{route('basket-add', $sku )}}" method="POST">
                 @if ($sku->isAvailable())
                     
                 <button type="submit" class="btn btn-primary" role="button">В корзину</button>
