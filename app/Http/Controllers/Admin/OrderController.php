@@ -14,7 +14,7 @@ class OrderController extends Controller
         $orders = Order::active()->with('currency')->paginate(5);
         
         return view('auth.orders.index', compact('orders'));
-        // короче копировать файлы с гит 30 урока чтобы убрать ошибку если что откатиться к коммиту последнему (refactor)
+        
     }
 
     public function show(Order $order)
