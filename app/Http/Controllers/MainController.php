@@ -16,24 +16,25 @@ class MainController extends Controller
 {
     public function index(ProductsFilterRequest $request)
     {
-        $skusQuery = Sku::query();
-        // $productQuery = Product::with('category');
+        $skusQuery = Sku::with(['product', 'product.category']);
 
-        // if ($request->filled('price_from')) {
-        //     $productQuery->where('price', '>=', $request->price_from);
-        // }
+        if ($request->filled('price_from')) {
+            $skusQuery->where('price', '>=', $request->price_from);
+        }
 
-        // if ($request->filled('price_to')) {
-        //     $productQuery->where('price', '<=', $request->price_to);
-        // }
+        if ($request->filled('price_to')) {
+            $skusQuery->where('price', '<=', $request->price_to);
+        }
 
-        // foreach (['hit', 'new', 'recommend'] as $field) {
-        //     if ($request->has($field)) {
-        //         $productQuery->$field();
-        //     }
-        // }
-        $skus = $skusQuery->paginate(6);
-        // $products = $productQuery->paginate(6)->withPath("?" . $request->getQueryString());
+        foreach (['hit', 'new', 'recommend'] as $field) {
+            if ($request->has($field)) {
+                $skusQuery->whereHas('product', function ($query) use ($field) {
+                    $query->$field();
+                });
+            }
+        }
+
+        $skus = $skusQuery->paginate(6)->withPath("?" . $request->getQueryString());
 
         return view('index', compact('skus'));
     }
@@ -52,19 +53,19 @@ class MainController extends Controller
 
     public function sku($categoryCode, $productCode, Sku $sku)
     {
-        if($sku->product->code != $productCode){
+        if ($sku->product->code != $productCode) {
             abort(404, 'Product not found');
         }
 
-        if($sku->product->category->code != $categoryCode){
+        if ($sku->product->category->code != $categoryCode) {
             abort(404, 'Category not found');
-        } 
+        }
         return view('product', compact('sku'));
     }
 
     public function subscribe(SubscriptionRequest $request, Sku $sku)
     {
-        
+
         Subscription::create([
             'email' => $request->email,
             'sku_id' => $sku->id,
