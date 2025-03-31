@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    protected $fillable = ['user_id', 'currency_id', 'sum'];
+    protected $fillable = ['user_id', 'currency_id', 'sum','coupon_id'];
 
     public function skus(){
         return $this->belongsToMany(Sku::class)->withPivot(['count', 'price'])->withTimestamps();
@@ -14,6 +14,10 @@ class Order extends Model
 
     public function currency(){
         return $this->belongsTo(Currency::class);
+    }
+
+    public function coupon(){
+        return $this->belongsTo(Coupon::class);
     }
 
     public function scopeActive($query)

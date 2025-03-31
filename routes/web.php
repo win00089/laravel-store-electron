@@ -51,6 +51,7 @@ Route::middleware(['set_locale'])->group(function () {
             Route::resource('products', 'ProductController');
             Route::resource('products/{product}/skus', 'SkuController');
             Route::resource('properties', 'PropertyController');
+            Route::resource('coupons', 'CouponController');
             Route::resource('properties/{property}/property-options', 'PropertyOptionController');
         });
     });
