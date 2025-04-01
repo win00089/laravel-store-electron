@@ -75,7 +75,10 @@ Route::middleware(['set_locale'])->group(function () {
 
             Route::post('/remove/{skus}', 'BasketController@basketRemove')->name('basket-remove');
             Route::post('/place', 'BasketController@basketConfirm')->name('basket-confirm');
+            Route::post('/coupon', 'BasketController@setCoupon')->name('set-coupon');
+
         });
+
     });
 
     Route::get('/{category}', 'MainController@category')->name('category');

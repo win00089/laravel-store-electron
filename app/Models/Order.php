@@ -6,17 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    protected $fillable = ['user_id', 'currency_id', 'sum','coupon_id'];
+    protected $fillable = ['user_id', 'currency_id', 'sum', 'coupon_id'];
 
-    public function skus(){
+    public function skus()
+    {
         return $this->belongsToMany(Sku::class)->withPivot(['count', 'price'])->withTimestamps();
     }
 
-    public function currency(){
+    public function currency()
+    {
         return $this->belongsTo(Currency::class);
     }
 
-    public function coupon(){
+    public function coupon()
+    {
         return $this->belongsTo(Coupon::class);
     }
 
@@ -34,13 +37,18 @@ class Order extends Model
         return $sum;
     }
 
-    public function getFullSum()
+    public function getFullSum($withCoupon = true)
     {
         $sum = 0;
 
         foreach ($this->skus as $sku) {
             $sum += $sku->price * $sku->countInOrder;
         }
+
+        if ($withCoupon && $this->hasCoupon()) {
+            $sum = $this->coupon->applyCost($sum, $this->currency);
+        }
+
         return $sum;
     }
 
@@ -50,16 +58,23 @@ class Order extends Model
         $this->phone = $phone;
         $this->status = 1;
         $this->sum = $this->getFullSum();
+
         $skus = $this->skus;
         $this->save();
 
-        foreach($skus as $skuInOrder){
+        foreach ($skus as $skuInOrder) {
             $this->skus()->attach($skuInOrder, [
                 'count' => $skuInOrder->countInOrder,
                 'price' => $skuInOrder->price,
-            ]);            
+            ]);
         }
+
         session()->forget('order');
         return true;
+    }
+
+    public function hasCoupon()
+    {
+        return $this->coupon;
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CouponRequest;
 use App\Models\Coupon;
 use Illuminate\Http\Request;
 
@@ -35,9 +36,21 @@ class CouponController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CouponRequest $request)
     {
-        //
+        $params = $request->all();
+        foreach (['type', 'only_once'] as $fieldName) {
+            if (isset($params[$fieldName])) {
+                $params[$fieldName] = 1;
+            }
+        }
+
+        if (!$request->has('type')) {
+            unset($params['currency_id']);
+        }
+
+        Coupon::create($params);
+        return redirect()->route('coupons.index');
     }
 
     /**
@@ -48,7 +61,7 @@ class CouponController extends Controller
      */
     public function show(Coupon $coupon)
     {
-        //
+        return view('auth.coupons.show', compact('coupon'));
     }
 
     /**
@@ -69,9 +82,23 @@ class CouponController extends Controller
      * @param  \App\Models\Coupon  $coupon
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Coupon $coupon)
+    public function update(CouponRequest $request, Coupon $coupon)
     {
-        //
+        $params = $request->all();
+        foreach (['type', 'only_once'] as $fieldName) {
+            if (isset($params[$fieldName])) {
+                $params[$fieldName] = 1;
+            }else{
+                $params[$fieldName] = 0;
+            }
+        }
+
+        if (!$request->has('type')) {
+            $params['currency_id'] = null;
+        }
+        
+        $coupon->update($params);
+        return redirect()->route('coupons.index');
     }
 
     /**
@@ -82,6 +109,7 @@ class CouponController extends Controller
      */
     public function destroy(Coupon $coupon)
     {
-        //
+        $coupon->delete();
+        return redirect()->route('coupons.index');
     }
 }
