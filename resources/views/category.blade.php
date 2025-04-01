@@ -5,14 +5,14 @@
 @section('content')
 
 <h1>
-    {{$category->__('name')}} {{$category->products->count()}}
+    {{$category->__('name')}} 
 </h1>
 <p>
     {{$category->__('description')}}
 </p>
 <div class="row">
-    @foreach ($category->products as $product)
-    @include('layouts.card', compact('product'))
+    @foreach ($category->products->map->sku->flatten() as $skuI)
+    @include('layouts.card', compact('skuI'))
     @endforeach
 </div>
 

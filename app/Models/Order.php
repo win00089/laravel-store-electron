@@ -6,45 +6,75 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    protected $fillable = ['user_id'];
-    public function products(){
-        return $this->belongsToMany(Product::class)->withPivot('count')->withTimestamps();
+    protected $fillable = ['user_id', 'currency_id', 'sum', 'coupon_id'];
+
+    public function skus()
+    {
+        return $this->belongsToMany(Sku::class)->withPivot(['count', 'price'])->withTimestamps();
     }
 
-    public function scopeActive($query){
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class);
+    }
+
+    public function coupon()
+    {
+        return $this->belongsTo(Coupon::class);
+    }
+
+    public function scopeActive($query)
+    {
         return $query->where('status', 1);
     }
 
-    public function calculateFullSum(){
+    public function calculateFullSum()
+    {
         $sum = 0;
-        foreach($this->products()->withTrashed()->get() as $product){
-            $sum += $product->getPriceForCount();
+        foreach ($this->skus()->withTrashed()->get() as $sku) {
+            $sum += $sku->getPriceForCount();
         }
         return $sum;
     }
 
-    public static function changeFullSum($changeSum){
-        $sum = self::getFullSum() + $changeSum;
-        session(['full_order_sum' => $sum]);
-    }
+    public function getFullSum($withCoupon = true)
+    {
+        $sum = 0;
 
-    public static function eraseOrderSum(){
-        session()->forget('full_order_sum');
-    }
-
-    public static function getFullSum(){
-        return session('full_order_sum', 0);
-    }
-    public function saveOrder($name, $phone){
-        if($this->status == 0){
-            $this->name = $name;
-            $this->phone = $phone;
-            $this->status = 1;
-            $this->save();
-            session()->forget('orderId');
-            return true;
-        }else{
-            return false;
+        foreach ($this->skus as $sku) {
+            $sum += $sku->price * $sku->countInOrder;
         }
+
+        if ($withCoupon && $this->hasCoupon()) {
+            $sum = $this->coupon->applyCost($sum, $this->currency);
+        }
+
+        return $sum;
+    }
+
+    public function saveOrder($name, $phone)
+    {
+        $this->name = $name;
+        $this->phone = $phone;
+        $this->status = 1;
+        $this->sum = $this->getFullSum();
+
+        $skus = $this->skus;
+        $this->save();
+
+        foreach ($skus as $skuInOrder) {
+            $this->skus()->attach($skuInOrder, [
+                'count' => $skuInOrder->countInOrder,
+                'price' => $skuInOrder->price,
+            ]);
+        }
+
+        session()->forget('order');
+        return true;
+    }
+
+    public function hasCoupon()
+    {
+        return $this->coupon;
     }
 }

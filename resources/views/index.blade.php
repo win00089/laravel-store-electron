@@ -40,9 +40,9 @@
 
 
 <div class="row">
-    @foreach ($products as $product)
-    @include('layouts.card', compact('product'))
+    @foreach ($skus as $sku)
+    @include('layouts.card', compact('sku'))
     @endforeach
 </div>
-{{ $products->links() }}
+{{ $skus->links() }}
 @endsection
